@@ -29,7 +29,6 @@ func (d *DMM) LoadConfig() error {
 	// replace with filename from select at first startup/config menu of available
 	// configs in the config folder
 	const configFile = "./Config/uni-t_ut161d"
-	fmt.Println(configFile)
 	f, err := os.ReadFile(configFile)
 	if err != nil {
 		return fmt.Errorf("Error, could not load keymap file: %s\n%v", configFile, err)
