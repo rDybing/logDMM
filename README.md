@@ -18,8 +18,6 @@ Non standard libraries used in this project:
 
 - github.com/google/gousb
 
----
-
 ## Binary
 
 In Linux it will have to be run using sudo. In Windows, you'll probably have to agree to it being not signed and potentially even run as admin. I'll know when getting it compiled in Windows. Which as it turns out is a bit of a hurdle that I'll have to figure out.
@@ -32,9 +30,7 @@ Mac and/or Windows may or may not be more forgiving.
 
 See file `DeviceInfo.md`
 
----
-
-**Contact:**
+## Contact:
 
 location   | name/handle
 -----------|---------
@@ -54,14 +50,10 @@ Linked In: | Roy Dybing
 - Added loading of (hardcoded) config file
 - Added connecting to USB interface of DMM
 
----
-
 ## License: MIT
 
-Full license text found in LICENCE file
+Full license text found in `LICENCE.md` file
 
 ## Copyright © 2023 Roy Dybing
-
----
 
 ʕ◔ϖ◔ʔ
