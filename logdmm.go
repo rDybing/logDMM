@@ -5,46 +5,63 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/google/gousb"
 )
 
-type DMM struct {
+type DMMT struct {
 	Model string
 	PID   uint16
 	VID   uint16
 }
 
 func main() {
-	var dmm DMM
+	var dmm DMMT
 	if err := dmm.LoadConfig(); err != nil {
 		log.Fatalf("dmm config file error, exiting! %v\n", err)
 		os.Exit(1)
 	}
 	fmt.Printf("Model: %s\nVID: %x - PID: %x\n", dmm.Model, dmm.VID, dmm.PID)
-	dmm.Connect()
+	//dmm.Connect()
 }
 
-func (d *DMM) LoadConfig() error {
+func (d *DMMT) LoadConfig() error {
 	// replace with filename from select at first startup/config menu of available
 	// configs in the config folder
-	const configFile = "./Config/uni-t_ut161d"
+	const configFile = "./Config/uni-t_ut161d.json"
 	f, err := os.ReadFile(configFile)
 	if err != nil {
-		return fmt.Errorf("Error, could not load keymap file: %s\n%v", configFile, err)
+		return fmt.Errorf("error, could not load file: %s\n%v", configFile, err)
 	}
-	if err := json.Unmarshal(f, &d); err != nil {
-		return fmt.Errorf("Error, could not unmarshal %s: %v", configFile, err)
+	type dConvertT struct {
+		Model string
+		PID   string
+		VID   string
 	}
+	var dcT dConvertT
+	if err := json.Unmarshal(f, &dcT); err != nil {
+		return fmt.Errorf("error, could not unmarshal %s: %v", configFile, err)
+	}
+	pid, err := stringToUInt16(dcT.PID)
+	if err != nil {
+		return err
+	}
+	vid, err := stringToUInt16(dcT.VID)
+	if err != nil {
+		return err
+	}
+	d.Model = dcT.Model
+	d.PID = pid
+	d.VID = vid
 	return nil
 }
 
-func (d DMM) Connect() {
+func (d DMMT) Connect() {
 	// open up usb connection
 	ctx := gousb.NewContext()
 	defer ctx.Close()
 	dev, err := ctx.OpenDeviceWithVIDPID(0x06a3, 0x0d67)
-	defer dev.Close()
 	if err != nil || dev == nil {
 		log.Fatalf("OpenDevice failed - ensure it is connected: %v\n", err)
 	}
@@ -85,4 +102,14 @@ func (d DMM) Connect() {
 		}
 		// display output
 	}
+}
+
+func stringToUInt16(s string) (uint16, error) {
+	s = "0x" + s
+	out, err := strconv.ParseUint(s, 0, 16)
+	if err != nil {
+		return 0, fmt.Errorf("could not convert %s to hex uint16 value: %v", s, err)
+	}
+	fmt.Printf("%s:%d\n", s, out)
+	return uint16(out), nil
 }
