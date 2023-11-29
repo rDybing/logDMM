@@ -8,7 +8,7 @@ Ambition is to have this app be quite modular and support several makes, brands 
 
 ## Build
 
-Will require libusb-1.0 or newer installed on the system. For Windows (or Mac) builds, please reference the guide from the gousb library README:
+Will require libusb-1.0 or newer installed on the system. For Mac and Windows builds, please reference the guide from the gousb library README:
 
 https://github.com/google/gousb
 
